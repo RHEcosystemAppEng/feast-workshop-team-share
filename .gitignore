@@ -1,0 +1,14 @@
+**/registry.db
+**/online.db
+.DS_Store
+**/__pycache__
+terraform.tfstate
+terraform.tfstate.backup
+.terraform*
+*.iml
+**/feast-postgres-data/*
+**/airflow_demo/airflow_home/*
+.vscode/*
+**/derby.log
+**/metastore_db/*
+.env
