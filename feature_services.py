@@ -9,5 +9,5 @@ feature_service = FeatureService(
 )
 
 feature_service_2 = FeatureService(
-    name="model_v2", features=[driver_hourly_stats_view], owner="jary@redhat.com",
+    name="model_v2", features=[driver_hourly_stats_view, driver_daily_miles_view], owner="jary@redhat.com",
 )
