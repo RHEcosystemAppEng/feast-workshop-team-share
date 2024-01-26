@@ -31,4 +31,5 @@ jobs:
           FEAST_USAGE: "False"
           IS_TEST: "True"
         run: |
+          cd feast_snowflake/feature_repo
           feast apply
