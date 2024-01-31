@@ -21,6 +21,8 @@ brew install xz protobuf openssl zlib
 pip install cryptography -U
 conda install protobuf
 conda install pymssql
+git clone https://github.com/feast-dev/feast.git
+cd feast
 pip install -e ".[dev]"
 make install-protoc-dependencies 
 make install-python-ci-dependencies PYTHON=3.9
