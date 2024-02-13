@@ -1,0 +1,28 @@
+project: feast_postgres
+provider: local
+registry:
+    registry_store_type: PostgreSQLRegistryStore
+    path: feast_registry
+    host: postgresql.feast.svc.cluster.local
+    port: 5432
+    database: feast
+    db_schema: feast
+    user: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+online_store:
+    type: postgres
+    host: postgresql.feast.svc.cluster.local
+    port: 5432
+    database: feast
+    db_schema: feast
+    user: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+offline_store:
+    type: postgres
+    host: postgresql.feast.svc.cluster.local
+    port: 5432
+    database: feast
+    db_schema: feast
+    user: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
+entity_key_serialization_version: 2
