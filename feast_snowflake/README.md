@@ -9,7 +9,7 @@ Integrate Feast with OpenShift, Snowflake, and AWS S3 and deploy OpenShift.
 1. **Create Project Feast Snowflake Project**:
 
 
-![snowflake_creation.png](snowflake_creation.png)
+![snowflake_creation.png](images/snowflake_creation.png)
 
 For detailed instructions, refer to the Feast documentation: https://docs.feast.dev/how-to-guides/feast-snowflake-gcp-aws
 
@@ -36,15 +36,15 @@ provider: aws
 cd feature_repo 
 feast apply
  ```
-![feast-apply.png](feast-apply.png)
+![feast-apply.png](images/feast-apply.png)
 
 - **Verify that the AWS S3 bucket is updated with the Feast Registry**.
 
-![aws_S3.png](aws_S3.png)
+![aws_S3.png](images/aws_S3.png)
 
 - **Check the Snowflake DEMO database for updated tables**.
 
-![snow-tables.png](snow-tables.png)
+![snow-tables.png](images/snow-tables.png)
 
 </details>
 
@@ -55,7 +55,7 @@ feast apply
 
 #### 1. **Create a project in OpenShift**:
 
-![openshift-project.png](openshift-project.png)
+![openshift-project.png](images/openshift-project.png)
 
 2. **Update  `feature_store.yaml` for Snowflake Environment:**
 
@@ -129,12 +129,12 @@ entity_key_serialization_version: 2
 
    - Added the Enviroment variabled to deployment :
 
-![environment_var.png](environment-var.png)
+![environment_var.png](images/environment-var.png)
 
 
    * Verify pod is running 
 
-![pod-status.png](pod-status.png)
+![pod-status.png](images/pod-status.png)
 
 
   * Update the deployment if have any change.`
@@ -155,7 +155,7 @@ entity_key_serialization_version: 2
 
 -Go to Pod terminal verify that able list feature viewes and entities  
 
-![pod-termnial.png](pod-termnial.png)
+![pod-termnial.png](images/pod-termnial.png)
 
 - Perform a Feast materialization to push features to the online store.
 
@@ -164,7 +164,7 @@ entity_key_serialization_version: 2
     feast materialize-incremental $CURRENT_TIME 
   ```
 
-![materialize.png](materialize.png)
+![materialize.png](images/materialize.png)
 
 2. Test using Feature Server Route
 
