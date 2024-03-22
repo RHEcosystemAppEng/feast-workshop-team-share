@@ -1,0 +1,23 @@
+project: feast_mariadb
+provider: aws
+registry:
+    registry_type: sql
+    path: mysql://feast:feast@127.0.0.1:33306/feast
+    cache_ttl_seconds: 60
+online_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: feast
+    db_schema: feast
+    user: feast
+    password: feast
+offline_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: feast
+    db_schema: feast
+    user: feast
+    password: feast    
+entity_key_serialization_version: 2
