@@ -156,7 +156,8 @@ offline_store:
 entity_key_serialization_version: 2
 ``` 
 
-### Step 5: Do `feast apply` -- 
+### Step 5: Validating the local feast deployment -
+Do `feast apply` -- 
 If it complains about tables not present in the offline store --> Navigate to openshift and login into postgres and create a table --
  ```
  sh-4.4$ psql -U feast -W
