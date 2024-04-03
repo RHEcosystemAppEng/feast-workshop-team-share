@@ -83,7 +83,6 @@ CREATE TABLE feast_driver_hourly_stats (
 Then `feast apply` --> you will see the following output -- 
 ```
 (feast) ➜  feature_repo git:(mariadb) ✗ feast apply
-zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
 /opt/miniconda3/envs/feast/lib/python3.9/site-packages/feast/feature_store.py:565: RuntimeWarning: On demand feature view is an experimental feature. This API is stable, but the functionality does not scale well for offline retrieval
   warnings.warn(
 /opt/miniconda3/envs/feast/lib/python3.9/site-packages/feast/infra/registry/sql.py:924: RemovedIn20Warning: Deprecated API features detected! These feature(s) are not compatible with SQLAlchemy 2.0. To prevent incompatible upgrades prior to updating applications, ensure requirements files are pinned to "sqlalchemy<2.0". Set environment variable SQLALCHEMY_WARN_20=1 to show all deprecation warnings.  Set environment variable SQLALCHEMY_SILENCE_UBER_WARNING=1 to silence this message. (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
@@ -95,7 +94,6 @@ Deploying infrastructure for driver_hourly_stats_fresh
 `feast feature-views list`
 ```
 (feast) ➜  feature_repo git:(mariadb) ✗ feast feature-views list;
-zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
 NAME                         ENTITIES    TYPE
 driver_hourly_stats          {'driver'}  FeatureView
 driver_hourly_stats_fresh    {'driver'}  FeatureView
@@ -106,7 +104,6 @@ transformed_conv_rate_fresh  {'driver'}  OnDemandFeatureView
 `feast entities list`
 ```
 (feast) ➜  feature_repo git:(mariadb) ✗ feast entities list;
-zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
 NAME    DESCRIPTION    TYPE
 driver                 ValueType.UNKNOWN
 ```
