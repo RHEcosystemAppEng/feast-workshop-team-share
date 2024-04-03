@@ -29,34 +29,7 @@ d. You should see both databases deployments
 feast init -t postgres feast_mariadb
 ```
 
-### Step 3: Your `feature_store.yaml` file -- 
-```
-project: feast_mariadb
-provider: aws
-registry:
-    registry_type: sql
-    path: mysql://feast:feast@127.0.0.1:33306/feast
-    cache_ttl_seconds: 60
-online_store:
-    type: postgres
-    host: localhost
-    port: 5432
-    database: feast
-    db_schema: feast
-    user: feast
-    password: feast
-offline_store:
-    type: postgres
-    host: localhost
-    port: 5432
-    database: feast
-    db_schema: feast
-    user: feast
-    password: feast    
-entity_key_serialization_version: 2
-``` 
-
-### Step 4: Port-forward postgres and mariadb
+### Step 3: Port-forward postgres and mariadb
 ```
 oc port-forward pod/<pod_name> 5432
 Forwarding from 127.0.0.1:5432 -> 5432
@@ -68,6 +41,120 @@ oc port-forward pod/<pod_name> 33306:3306 -n feast
 Forwarding from 127.0.0.1:33306 -> 3306
 Forwarding from [::1]:33306 -> 3306
 ```
+
+### Step 4: Your `feature_store.yaml` file for local deployment -- 
+```
+project: feast_mariadb
+provider: local
+registry:
+    registry_type: sql
+    path: mysql://feast:feast@127.0.0.1:33306/sampledb
+    cache_ttl_seconds: 60
+online_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: sampledb
+    user: feast
+    password: feast
+offline_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: sampledb
+    user: feast
+    password: feast    
+entity_key_serialization_version: 2
+```
+
+Navigate to `/feast_mariadb/feature_repo` directory and do `feast_apply` -- 
+If it complains about table not being found - create a table inside `postgres/mariadb` --
+```
+CREATE TABLE feast_driver_hourly_stats (
+    ->    driver_id INT,
+    ->    event_timestamp TIMESTAMP,
+    ->    created TIMESTAMP,
+    ->    conv_rate FLOAT,
+    ->    acc_rate FLOAT,
+    ->    avg_daily_trips INT
+    -> );
+```
+
+Then `feast apply` --> you will see the following output -- 
+```
+(feast) ➜  feature_repo git:(mariadb) ✗ feast apply
+zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
+/opt/miniconda3/envs/feast/lib/python3.9/site-packages/feast/feature_store.py:565: RuntimeWarning: On demand feature view is an experimental feature. This API is stable, but the functionality does not scale well for offline retrieval
+  warnings.warn(
+/opt/miniconda3/envs/feast/lib/python3.9/site-packages/feast/infra/registry/sql.py:924: RemovedIn20Warning: Deprecated API features detected! These feature(s) are not compatible with SQLAlchemy 2.0. To prevent incompatible upgrades prior to updating applications, ensure requirements files are pinned to "sqlalchemy<2.0". Set environment variable SQLALCHEMY_WARN_20=1 to show all deprecation warnings.  Set environment variable SQLALCHEMY_SILENCE_UBER_WARNING=1 to silence this message. (Background on SQLAlchemy 2.0 at: https://sqlalche.me/e/b8d9)
+  conn.execute(insert_stmt)
+Deploying infrastructure for driver_hourly_stats
+Deploying infrastructure for driver_hourly_stats_fresh
+```
+
+`feast feature-views list`
+```
+(feast) ➜  feature_repo git:(mariadb) ✗ feast feature-views list;
+zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
+NAME                         ENTITIES    TYPE
+driver_hourly_stats          {'driver'}  FeatureView
+driver_hourly_stats_fresh    {'driver'}  FeatureView
+transformed_conv_rate        {'driver'}  OnDemandFeatureView
+transformed_conv_rate_fresh  {'driver'}  OnDemandFeatureView
+```
+
+`feast entities list`
+```
+(feast) ➜  feature_repo git:(mariadb) ✗ feast entities list;
+zsh: /usr/local/bin/feast: bad interpreter: /usr/local/opt/python@3.11/bin/python3.11: no such file or directory
+NAME    DESCRIPTION    TYPE
+driver                 ValueType.UNKNOWN
+```
+
+## These steps are to deploy feast on openshift 
+
+- **Add Permissions to Security Context Constraint (SCC)**:
+      
+     ```
+     oc adm policy add-scc-to-user anyuid -z default -n <namespace>>
+     ``` 
+- Add the Feast Helm repository and update:
+     ```
+      helm repo add feast-charts https://feast-helm-charts.storage.googleapis.com
+      helm repo update
+     ```
+
+- Deploy Feast on Openshift using Helm, by setting `feature_store.yaml` file as a base64 string from feature_repo directory:
+      ```
+      helm install feast-release feast-charts/feast-feature-server --set feature_store_yaml_base64=$(base64 < feature_store.yaml) 
+      ```
+  
+`feature_store.yaml` file -- 
+```
+project: feast_postgres
+provider: aws
+registry:
+    registry_type: sql
+    path: mysql://feast:feast@mariadb.feast-example.svc.cluster.local:3306/sampledb
+    cache_ttl_seconds: 60
+online_store:
+    type: postgres
+    host: postgresql.feast-example.svc.cluster.local
+    port: 5432
+    database: sampledb
+    db_schema: feast
+    user: feast
+    password: feast
+offline_store:
+    type: postgres
+    host: postgresql.feast-example.svc.cluster.local
+    port: 5432
+    database: sampledb
+    db_schema: feast
+    user: feast
+    password: feast
+entity_key_serialization_version: 2
+``` 
 
 ### Step 5: Do `feast apply` -- 
 If it complains about tables not present in the offline store --> Navigate to openshift and login into postgres and create a table --
