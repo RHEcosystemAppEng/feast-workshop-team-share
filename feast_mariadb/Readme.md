@@ -153,6 +153,9 @@ offline_store:
 entity_key_serialization_version: 2
 ``` 
 
+### Please note that our current setup utilizes the same database connectivity for both offline and online stores. However, for production environments, there may be considerations for adopting a distinct database solution.
+
+
 ### Step 5: Validating the local feast deployment -
 Do `feast apply` -- 
 If it complains about tables not present in the offline store --> Navigate to openshift and login into postgres and create a table --
