@@ -17,6 +17,8 @@ Link to original demos (YouTube video and git repo):
 * PSQL DB instance created
     * Note: at least `1Gi` of memory is requested, especially if you run in ephemeral mode
 * Model Registry operator installed and PSQL instance created
+* S3-compatible server and `feast` bucket available
+    * Use [MinIO](https://min.io/), installed with these [instructions](https://ai-on-openshift.io/tools-and-applications/minio/minio/)
 
 ## Data Preparation
 * [00-persist-mnist.ipynb](./00-persist-mnist.ipynb)
