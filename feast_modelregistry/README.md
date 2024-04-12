@@ -15,6 +15,7 @@ Link to original demos (YouTube video and git repo):
 ## Demo Notebooks
 ### Prerequisites
 * PSQL DB instance created
+    * Note: at least `1Gi` of memory is requested, especially if you run in ephemeral mode
 * Model Registry operator installed and PSQL instance created
 
 ## Data Preparation
