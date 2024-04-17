@@ -1,0 +1,6 @@
+feast==0.36.0
+psycopg2>=2.9
+onnx==1.14.1
+onnxruntime
+#tf2onnx
+#typing-extensions==4.5.0
