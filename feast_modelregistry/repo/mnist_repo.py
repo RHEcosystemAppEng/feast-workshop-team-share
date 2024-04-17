@@ -23,7 +23,7 @@ features = features.append(Field(name="number", dtype=Int64))
 mnist_fv = FeatureView(
     name="mnist",
     entities=[image],
-    ttl=timedelta(days=10),
+    ttl=timedelta(days=30),
     schema=features,
     online=True,
     source=mnist_source,
