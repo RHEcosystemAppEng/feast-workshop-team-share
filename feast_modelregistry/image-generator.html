@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+    <title>Canvas Drawing</title>
+</head>
+<body>
+    <div>
+        <canvas id="myCanvas" width="400" height="400"></canvas>
+    </div>
+        <button onclick="reset()">Clear</button>
+        <br>
+        <label for="resultTextArea">Result:</label>
+        <textarea id="resultTextArea" rows="20" cols="120" readonly></textarea>
+    </div>
+
+    <script>
+let pixelMatrix = [];
+
+function reset() {
+  document.getElementById('resultTextArea').value = ''
+  const canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+
+  clearMatrix(canvas);
+}
+
+function clearMatrix(canvas){
+  for (let i = 0; i < canvas.height; i++) {
+      pixelMatrix[i] = [];
+      for (let j = 0; j < canvas.width; j++) {
+          pixelMatrix[i][j] = 0; // 0 represents white
+      }
+  }
+}
+
+function scaleMatrix(inputMatrix, outputSize) {
+    const inputSize = inputMatrix.length;
+    const scaleFactor = inputSize / outputSize;
+    const outputMatrix = [];
+
+    for (let i = 0; i < outputSize; i++) {
+        outputMatrix[i] = [];
+
+        for (let j = 0; j < outputSize; j++) {
+            const x = i * scaleFactor;
+            const y = j * scaleFactor;
+            outputMatrix[i][j] = bilinearInterpolation(inputMatrix, x, y);
+        }
+    }
+
+    return outputMatrix;
+}
+
+function bilinearInterpolation(matrix, x, y) {
+    const xFloor = Math.floor(x);
+    const yFloor = Math.floor(y);
+    const weightX = x - xFloor;
+    const weightY = y - yFloor;
+
+    const topLeft = matrix[yFloor][xFloor];
+    const topRight = matrix[yFloor][xFloor + 1] || topLeft;
+    const bottomLeft = matrix[yFloor + 1] ? matrix[yFloor + 1][xFloor] : topLeft;
+    const bottomRight = matrix[yFloor + 1] ? matrix[yFloor + 1][xFloor + 1] || bottomLeft : bottomLeft;
+
+    const topInterpolation = topRight * weightX + topLeft * (1 - weightX);
+    const bottomInterpolation = bottomRight * weightX + bottomLeft * (1 - weightX);
+
+    return bottomInterpolation * weightY + topInterpolation * (1 - weightY);
+}
+        document.addEventListener("DOMContentLoaded", function() {
+            const canvas = document.getElementById("myCanvas");
+            const context = canvas.getContext("2d");
+            let isDrawing = false;
+            clearMatrix(canvas);
+
+            function draw(x, y) {
+                const radius = 15; // Half of the stroke width
+                context.fillStyle = "#000"; // Black color
+                context.beginPath();
+                context.arc(x, y, radius, 0, 2 * Math.PI);
+                context.fill();
+                markPixelsAsBlack(x, y);
+            }
+
+            function markPixelsAsBlack(x, y) {
+                for (let i = y - 15; i <= y + 15; i++) {
+                    for (let j = x - 15; j <= x + 15; j++) {
+                        if (i >= 0 && i < canvas.height && j >= 0 && j < canvas.width) {
+                            pixelMatrix[j][i] = 1; // 1 represents black
+                        }
+                    }
+                }
+            }
+
+            canvas.addEventListener("mousedown", (e) => {
+                isDrawing = true;
+                draw(e.offsetX, e.offsetY);
+            });
+
+            canvas.addEventListener("mousemove", (e) => {
+                if (isDrawing) {
+                    draw(e.offsetX, e.offsetY);
+                }
+            });
+
+            canvas.addEventListener("mouseup", () => {
+                isDrawing = false;
+                console.log("Pixel Matrix:");
+                matrix = scaleMatrix(pixelMatrix, 28);
+                console.log(JSON.stringify(matrix));
+                display(matrix);
+            });
+
+            canvas.addEventListener("mouseout", () => {
+                isDrawing = false;
+            });
+
+            function display(matrix) {
+                document.getElementById('resultTextArea').value = JSON.stringify(matrix);
+            }
+            
+        });
+    </script>
+</body>
+</html>
