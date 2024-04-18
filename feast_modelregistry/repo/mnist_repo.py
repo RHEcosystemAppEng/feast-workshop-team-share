@@ -19,12 +19,12 @@ mnist_source = PostgreSQLSource(
 )
 
 features = [Field(name=f"feature_{i+1}", dtype=Array(Float32)) for i in range(28)]
-features = features.append(Field(name="number", dtype=Int64))
+features_and_scores = features.copy().append(Field(name="number", dtype=Int64))
 mnist_fv = FeatureView(
     name="mnist",
     entities=[image],
     ttl=timedelta(days=30),
-    schema=features,
+    schema=features_and_scores,
     online=True,
     source=mnist_source,
     tags={"team": "redhat_feast", "demo": "mnist"},
@@ -37,9 +37,16 @@ mnist = FeatureService(
     ],
 )
 
+mnist_push_source = PostgreSQLSource(
+    name="mnist_push_source",
+    query="SELECT * FROM mnist_push_source",
+    timestamp_field="ts",
+    created_timestamp_column="created",
+)
+
 images_push_source = PushSource(
     name="images_push_source",
-    batch_source=mnist_source,
+    batch_source=mnist_push_source,
 )
 
 mnist_fresh_fv = FeatureView(
