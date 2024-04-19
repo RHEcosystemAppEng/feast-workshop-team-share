@@ -23,7 +23,7 @@ features_and_scores = features.copy().append(Field(name="number", dtype=Int64))
 mnist_fv = FeatureView(
     name="mnist",
     entities=[image],
-    ttl=timedelta(days=30),
+    ttl=timedelta(days=1),
     schema=features_and_scores,
     online=True,
     source=mnist_source,
