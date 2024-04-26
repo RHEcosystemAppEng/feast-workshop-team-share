@@ -15,36 +15,6 @@ import time
 from kubernetes import client
 
 
-def create_data_connection_secret(selected_model):
-    """
-    Creates a manifest file to model the Secret representing an ODH DataConnection to the
-    S3 bucket.
-    """
-    connection_secret = f'''
-kind: Secret
-apiVersion: v1
-metadata:
-  name: {selected_model.name}-s3-creds
-  namespace: {os.environ['MODEL_NAMESPACE']}
-  labels:
-    opendatahub.io/dashboard: 'true'
-    opendatahub.io/managed: 'true'
-  annotations:
-    opendatahub.io/connection-type: s3
-    openshift.io/display-name: {selected_model.name}-s3
-stringData:
-  AWS_ACCESS_KEY_ID: {os.environ['accesskey']}
-  AWS_DEFAULT_REGION: {os.environ['AWS_DEFAULT_REGION']}
-  AWS_S3_BUCKET: {os.environ['AWS_S3_BUCKET']}
-  AWS_S3_ENDPOINT: {os.environ['AWS_S3_ENDPOINT']}
-  AWS_SECRET_ACCESS_KEY: {os.environ['secretkey']}
-type: Opaque
-'''
-
-    with open("connection_secret.yaml", 'w') as file:
-        file.write(connection_secret)
-
-
 def create_inference_service(selected_model, selected_model_version, selected_model_artifact):
     """
     Creates an InferenceService manifest to model the selected Model version and artifact.
@@ -174,11 +144,10 @@ def generate_prediction_input(model_name, image):
             "name": "x",
             "shape": [1, 28, 28],
             "datatype": "FP64",
-            "data": []
+            "data": image
         }]
     }
 
-    prediction_input['inputs'][0]['data'] = image
     return prediction_input
 
 

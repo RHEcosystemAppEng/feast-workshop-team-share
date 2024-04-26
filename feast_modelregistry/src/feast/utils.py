@@ -38,7 +38,6 @@ def to_model_data(online_features):
     for index in range(len(online_features)):
         image_ids.append(online_features['image_id'].iloc[index])
 
-        image = []
-        image.append([to_array(online_features[f'feature_{id+1}'].iloc[index]) for id in range(28)])
+        image = [to_array(online_features[f'feature_{id+1}'].iloc[index]) for id in range(28)]
         images.append(image)
     return (image_ids, images)
