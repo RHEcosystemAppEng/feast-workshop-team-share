@@ -1,2 +1,2 @@
-feast==0.36.0
+feast==0.37.1
 psycopg2>=2.9
