@@ -1,0 +1,2 @@
+## feast_data_quality_ge
+This [jupyter notebook](./monitoring_data_quality_using_great_expectations.ipynb) will demonstrate the features of feast integration with [Great Expectations](https://docs.greatexpectations.io/docs/home/) library. In this example we will show an example of validating the data quality of feast features using great expectations library. You can also find the blog [here](https://docs.feast.dev/tutorials/validating-historical-features)
