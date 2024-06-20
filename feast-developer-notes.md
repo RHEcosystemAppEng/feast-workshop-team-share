@@ -11,3 +11,4 @@ Documenting the resources I have followed while trying to understand the feast c
 5) This is the path all the shared proto definitions are located - https://github.com/feast-dev/feast/tree/master/protos
 6) This the path having the code related to feast UI. Feast UI is a React based application.
 7) python click package will facilitate out of the box options to create the CLI applications. Feast is using this library. for more info refer (website)[https://click.palletsprojects.com/en/8.1.x/].
+If you want to automatically build the code in the development environment then use command `pip install -e .`
