@@ -38,14 +38,12 @@ Set the environment variables in [feature_store.yaml](feature_repo%2Ffeature_sto
           project: feast_postgres
           provider: local
           registry:
-              registry_store_type: PostgreSQLRegistryStore
-              path: feast_registry
-              host: postgresql.feast.svc.cluster.local
-              port: 5432
-              database: feast
-              db_schema: feast
-              user: ${PG_USERNAME}
-              password: ${PG_PASSWORD}
+               registry_type: sql
+               path: postgresql://${PG_USERNAME}:${PG_PASSWORD}@127.0.0.1:5432/feast
+               cache_ttl_seconds: 60
+               sqlalchemy_config_kwargs:
+                    echo: true
+                    pool_pre_ping: true
           online_store:
               type: postgres
               host: postgresql.feast.svc.cluster.local

@@ -1,0 +1,26 @@
+project: feast_edb_repo
+provider: local
+registry:
+    registry_type: sql
+    path: postgresql://app:mysecretpassword@127.0.0.1:5432/app
+    cache_ttl_seconds: 60
+    sqlalchemy_config_kwargs:
+        echo: true
+        pool_pre_ping: true
+online_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: app
+    db_schema: public
+    user: app
+    password: mysecretpassword
+offline_store:
+    type: postgres
+    host: localhost
+    port: 5432
+    database: app
+    db_schema: public
+    user: app
+    password: mysecretpassword
+entity_key_serialization_version: 2
